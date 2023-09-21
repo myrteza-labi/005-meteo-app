@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import axios from 'axios';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const [city, setCity] = useState('');
+const [weatherData, setWeatherData] = useState(null);
+
+
+const getWeatherData = async () => {
+  const response = await axios.get(`http://localhost:3001/weather?city=${city}`); 
+  setWeatherData(response.data); 
 }
+
+const temperatureCelcius = weatherData && parseInt(weatherData.temperature - 273.15);
+
+return (
+<div>
+<h1>Meteo app - Entrainement Javascript</h1>
+<label htmlFor="city">Saisissez la ville </label>
+<input onChange={(e) => setCity(e.target.value)} type="text" id="city"/>
+{weatherData &&
+<>
+<h2>Météo pour la ville de {city}</h2>
+<p>Température : {temperatureCelcius} </p>
+<p>Déscription : {weatherData.description} </p>
+</>}
+
+
+<button onClick={getWeatherData}>Obtenir la météo</button>
+</div>
+)
+}
+
 
 export default App;
