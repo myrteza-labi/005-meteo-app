@@ -8,8 +8,13 @@ const [weatherData, setWeatherData] = useState(null);
 
 
 const getWeatherData = async () => {
-  const response = await axios.get(`http://localhost:3001/weather?city=${city}`); 
-  setWeatherData(response.data); 
+  try {
+    const response = await axios.get(`http://localhost:3001/weather?city=${city}`); 
+    setWeatherData(response.data); 
+  }
+  catch (error) {
+    console.error(error); 
+  }
 }
 
 const temperatureCelcius = weatherData && parseInt(weatherData.temperature - 273.15);
